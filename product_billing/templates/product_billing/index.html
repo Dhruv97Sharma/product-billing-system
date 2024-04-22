@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World</title>
+</head>
+<body>
+    <h1>Products List Page: Select Products</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for product in products %}
+        <div style="border: 1px solid black;">
+            <input type="checkbox" name="products" value="{{ product.id }}" data-price="{{ product.price }}"> {{ product.name }} - INR{{ product.price }}
+        </div>
+        <br>
+        {% endfor %}
+        <button type="button" onclick="calculateTotalPrice()">Calculate Total Cost</button>
+    </form>
+    <p>Generated bill</p>
+    <p>Total Products Cost: INR - <span id="totalPrice">0.00</span></p>
+</body>
+<script>
+    // dynamically calculate product price total based on selected products
+    function calculateTotalPrice() {
+        var totalCost = 0;
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    // Get the price of the selected product
+                    console.log(checkbox.getAttribute('data-price'));
+                    var price = parseFloat(checkbox.getAttribute('data-price'));
+                    totalCost += price;
+                }
+            });
+        document.getElementById('totalPrice').innerHTML = totalCost;
+    }
+</script>
+</html>
